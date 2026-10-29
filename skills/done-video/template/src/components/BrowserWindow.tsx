@@ -2,9 +2,10 @@ import { Lock } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { shadow, theme as look } from "../lib/style"
+import stage from "../stage.json"
 import { WINDOW_BOX } from "./Camera"
 
-export const TITLE_BAR = 46
+export const TITLE_BAR = stage.titleBar
 /** A real browser window's corners. Squarer themes get squarer windows, never rounder ones. */
 const MAX_RADIUS = 14
 

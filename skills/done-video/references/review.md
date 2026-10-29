@@ -4,7 +4,7 @@ Check every item on stills from `node scripts/still.mjs --sheet …` before rend
 
 ## Picture
 
-- **Screens match the product.** Each mockup shows the real layout, labels, components and copy, compared side by side with its source file or screenshot.
+- **Screens match the product.** Each mockup shows the real layout, labels, components and copy. Its `still.mjs --compare` overlay lines up with a capture of the real page or a screenshot, apart from the demo data.
 - **The look is the design system's.** The cards, type, corners and backdrop sit beside the design system's own pages without looking foreign, and `still.mjs` printed no `[theme]` warnings.
 - **Demo data is fictional.** No real customers, people, email addresses or tokens appear anywhere on screen, including URL bars and avatars.
 - **Clicks land.** Render a still on each click frame, zoomed in. The pointer's tip sits on the control it clicks.

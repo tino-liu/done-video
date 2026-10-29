@@ -3,12 +3,16 @@ import type { ReactNode } from "react"
 
 import { Ease, interp } from "../lib/anim"
 import { measure, RootContext } from "../lib/measure"
+import stage from "../stage.json"
 
-export const STAGE_W = 1920
-export const STAGE_H = 1080
+export const STAGE_W = stage.width
+export const STAGE_H = stage.height
 
 /** Where the browser window sits on the stage. The camera keeps zoomed shots inside it. */
-export const WINDOW_BOX = { x: 120, y: 100, w: 1680, h: 950 }
+export const WINDOW_BOX = stage.window
+
+/** ?home holds every shot at home, so still.mjs --compare finds the window's contents at their real size. */
+const HOLD_HOME = new URLSearchParams(location.search).has("home")
 
 export type CamKey = {
   /** Frame the move starts. */
@@ -95,7 +99,7 @@ export const useShot = () => useContext(ShotContext)
 /** Zooms and pans its children. Children measure their targets against this element. */
 export function Camera({ f, keys: camKeys = [], children }: { f: number; keys?: CamKey[]; children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null)
-  const { cx, cy, s } = shotAt(root.current, f, camKeys)
+  const { cx, cy, s } = HOLD_HOME ? HOME : shotAt(root.current, f, camKeys)
   const tx = STAGE_W / 2 - cx * s
   const ty = STAGE_H / 2 - cy * s
   return (

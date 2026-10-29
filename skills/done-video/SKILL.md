@@ -38,6 +38,8 @@ Screens are rebuilt to match the product exactly: the same layout, labels, compo
 
 Find the design system's source too. It is often the product's own, in the same stylesheets.
 
+Find out where the product runs, such as a local dev server or staging, and each screen's URL there, so step 7 can capture the real pages to rebuild against.
+
 The step is done when every screen in the video has a source (a file path or a screenshot), and so does the design system.
 
 ### 3. Script
@@ -62,7 +64,9 @@ Read [references/theme.md](references/theme.md), then write the theme: a file in
 
 ### 7. Build the scenes
 
-Read [references/scenes.md](references/scenes.md) before writing the first scene. It covers beats, cues, cursor and camera keys, callouts, sound effects, styling with the theme, and the rules that keep frames **pure** and targets measurable. Preview with `npm run dev` (http://localhost:5181: space plays, the arrow keys seek). `npm run check` must pass.
+Read [references/scenes.md](references/scenes.md) before writing the first scene. It covers beats, cues, cursor and camera keys, callouts, sound effects, styling with the theme, matching the real screens, and the rules that keep frames **pure** and targets measurable. Preview with `npm run dev` (http://localhost:5181: space plays, the arrow keys seek). `npm run check` must pass.
+
+Capture each real screen with `scripts/capture.mjs` before rebuilding it, and compare the rebuild with `still.mjs --compare`. The step is done when every screen's overlay lines up with its capture, apart from the demo data.
 
 ### 8. Check frames
 
@@ -78,7 +82,8 @@ Run `npm run mix`, then `npm run render`. The video is written to `out/<output>`
 |---|---|
 | `npm run voice` | Voice clips and `src/timeline.json`. `--reroll=id,id` regenerates those scenes; `--placeholder` forces the computer's voice. |
 | `npm run dev` | The player, with the mixed audio once it exists, and a menu to switch themes. |
-| `node scripts/still.mjs <frames>` | PNGs in `out/stills`. Frames are written `120`, `2.5s` or `demo+3s`; `--sheet` also tiles them into `sheet.png`. `--theme a,b` renders them in each theme, a row per theme. |
+| `node scripts/still.mjs <frames>` | PNGs in `out/stills`. Frames are written `120`, `2.5s` or `demo+3s`; `--sheet` also tiles them into `sheet.png`. `--theme a,b` renders them in each theme, a row per theme. `--compare <name>` checks the window's contents against a capture. |
+| `node scripts/capture.mjs <url> --name <name>` | Screenshots a real page at the size its rebuild fills, into `out/reference/`. `--click`, `--wait`, `--scheme dark`; `--login` lets the user sign in first. |
 | `npm run check` | Type-checks the scenes. |
 | `npm run mix` | Voice, sound effects and music in `out/mix.wav`, at about −16 LUFS. `--stems` also writes each bus on its own. |
 | `npm run render` | The MP4. `--from 300 --to 600` renders a slice; `--no-captions` leaves out the captions; `--theme <name>` renders another theme. |

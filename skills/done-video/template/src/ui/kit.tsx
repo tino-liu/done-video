@@ -6,6 +6,13 @@ import type { CSSProperties, ReactNode } from "react"
 
 import { caretOn, Ease, interp } from "../lib/anim"
 
+/** The root font size of a real browser. The stage's is larger, so rem sizes scale up with it. */
+const BROWSER_ROOT_PX = 16
+
+/** A size the product sets in px, in rem, so it scales with the rest of the rebuilt screen. Plain px stays
+ *  small, and still.mjs --compare shows it out of line with the real page. */
+export const rem = (px: number) => `${px / BROWSER_ROOT_PX}rem`
+
 type ButtonProps = {
   variant?: "primary" | "outline" | "ghost"
   children: ReactNode
@@ -66,7 +73,7 @@ export function Select({ f, value, placeholder, options, openAt = Infinity, clos
     <div className="relative">
       <div data-t={target} className={`bg-app-bg flex h-9 items-center justify-between rounded-md border px-3 text-[0.75rem] ${t > 0 ? "border-app-brand" : "border-app-border"}`}>
         <span className={value ? "" : "text-app-mfg"}>{value ?? placeholder}</span>
-        <ChevronDown size={15} className="text-app-mfg" style={{ transform: t > 0 ? "rotate(180deg)" : undefined }} />
+        <ChevronDown size={rem(15)} className="text-app-mfg" style={{ transform: t > 0 ? "rotate(180deg)" : undefined }} />
       </div>
       {options.length > 0 && <OptionList t={t} options={options} highlighted={highlighted} optionTarget={optionTarget} className="top-10 right-0 left-0" />}
     </div>
@@ -99,7 +106,7 @@ export function Dialog({ f, openAt, closeAt = Infinity, children, width = 520, t
   return (
     <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ background: `rgba(0,0,0,${0.5 * t})` }}>
       <div data-t={target} className="bg-app-bg border-app-border relative rounded-lg border p-6 shadow-2xl" style={{ width, opacity: t, transform: `scale(${0.95 + 0.05 * t})` }}>
-        <X size={16} className="text-app-mfg absolute top-4 right-4" />
+        <X size={rem(16)} className="text-app-mfg absolute top-4 right-4" />
         {children}
       </div>
     </div>
@@ -113,7 +120,7 @@ export function Toast({ f, at, hold = 75, children }: { f: number; at: number; h
   return (
     <div className="absolute right-6 bottom-6 z-50" style={{ opacity: Math.min(1, t), transform: `translateY(${(1 - t) * 24}px)` }}>
       <div className="bg-app-bg border-app-border text-app-fg flex items-center gap-2.5 rounded-lg border px-4 py-3 text-[0.75rem] shadow-2xl" style={{ minWidth: 340 }}>
-        <CircleCheck size={17} className="text-green-600" />
+        <CircleCheck size={rem(17)} className="text-green-600" />
         {children}
       </div>
     </div>

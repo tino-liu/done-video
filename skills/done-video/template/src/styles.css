@@ -27,7 +27,7 @@
   --color-app-brand: #2563eb;
 }
 
-/* The stage is laid out at 1.25x a real browser's size, so UI text built in rem reads at 1080p. */
+/* The stage is laid out at 1.25x a real browser's size (uiScale in src/stage.json), so UI text built in rem reads at 1080p. */
 html {
   font-size: 20px;
 }

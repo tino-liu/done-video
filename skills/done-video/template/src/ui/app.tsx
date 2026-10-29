@@ -4,9 +4,9 @@ import { CalendarDays, Download, FileSpreadsheet, Filter, FolderKanban, Inbox, L
 import type { ComponentType, ReactNode } from "react"
 
 import { brand } from "../lib/brand"
-import { Button } from "./kit"
+import { Button, rem } from "./kit"
 
-type IconType = ComponentType<{ size?: number; className?: string }>
+type IconType = ComponentType<{ size?: number | string; className?: string }>
 
 const NAV: Array<{ label: string; icon: IconType }> = [
   { label: "Inbox", icon: Inbox },
@@ -21,13 +21,13 @@ export function AppShell({ active, crumb, children }: { active: string; crumb: R
     <div className="bg-app-bg text-app-fg absolute inset-0 flex">
       <aside className="bg-app-side border-app-border flex w-60 shrink-0 flex-col border-r px-3 pt-4">
         <div className="flex items-center gap-2 px-2 pb-6">
-          <img src={brand.logo} style={{ width: 30 }} />
+          <img src={brand.logo} style={{ width: rem(30) }} />
           <span className="text-[1rem] font-bold tracking-tight">{brand.name}</span>
         </div>
         <nav className="flex flex-col gap-0.5">
           {NAV.map(({ label, icon: Icon }) => (
             <div key={label} data-t={`nav-${label.toLowerCase().replace(/\s+/g, "-")}`} className={`flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[0.8rem] ${label === active ? "bg-app-bg font-semibold shadow-sm" : "text-app-mfg"}`}>
-              <Icon size={16} className={label === active ? "text-app-brand" : ""} />
+              <Icon size={rem(16)} className={label === active ? "text-app-brand" : ""} />
               {label}
             </div>
           ))}
@@ -99,16 +99,16 @@ export function TasksView({ exportPressed, menu, toolbarEnd }: { exportPressed?:
         <div className="flex items-center gap-2">
           {toolbarEnd}
           <Button variant="outline">
-            <Filter size={14} /> Filter
+            <Filter size={rem(14)} /> Filter
           </Button>
           <div className="relative z-30">
             <Button variant="outline" target="export-btn" pressedNow={exportPressed}>
-              <Download size={14} /> Export
+              <Download size={rem(14)} /> Export
             </Button>
             {menu}
           </div>
           <Button>
-            <Plus size={14} /> New task
+            <Plus size={rem(14)} /> New task
           </Button>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function TasksView({ exportPressed, menu, toolbarEnd }: { exportPressed?:
             Owner
           </span>
           <span data-t="col-due" className="flex w-fit items-center gap-1">
-            <CalendarDays size={12} /> Due
+            <CalendarDays size={rem(12)} /> Due
           </span>
           <span>Status</span>
         </div>
@@ -140,7 +140,7 @@ export function TasksView({ exportPressed, menu, toolbarEnd }: { exportPressed?:
 export function DownloadChip({ opacity }: { opacity: number }) {
   return (
     <div data-t="download-chip" className="border-app-border flex h-9 items-center gap-2 rounded-md border px-3 text-[0.7rem]" style={{ opacity, transform: `translateY(${(1 - opacity) * -6}px)` }}>
-      <FileSpreadsheet size={15} className="text-green-700" />
+      <FileSpreadsheet size={rem(15)} className="text-green-700" />
       <span className="font-medium">website-relaunch-tasks.csv</span>
       <span className="text-app-mfg">2 KB</span>
     </div>

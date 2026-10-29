@@ -142,3 +142,32 @@ The product's screens use `--font-app` and the `--color-app-*` tokens instead.
 ## Product UI
 
 `src/ui/kit.tsx` holds frame-driven controls: `Button`, `Input`, `Label`, `Select`, `Menu`, `Dialog`, `Toast` and `Spinner`. Their colours come from the `--color-app-*` tokens in `src/styles.css`, and the browser window sets its contents in `--font-app`, so restyle both to the product. `src/ui/app.tsx` is the example product. Replace it with the real product's screens, built from its own components, with the same structure, labels and copy.
+
+Write every size in `rem`, as the product's Tailwind classes already are. A size the product sets in px, such as an icon's `size={16}` or a fixed width, goes through `rem(16)` from the kit. Plain px doesn't scale with the stage, so it comes out a fifth smaller than the rest of the screen.
+
+### Matching the real screens
+
+The rebuild is checked against **captures** of the real pages. When the product runs where Chrome can reach it, such as a local dev server or staging, capture each screen before rebuilding it:
+
+```bash
+node scripts/capture.mjs http://localhost:3000/projects --name projects
+```
+
+The capture is exactly the size the screen fills in the video's browser window. It is laid out as a real browser window of about 1344×723 would lay it out, at the same 1.25× scale as the stage, and saved to `out/reference/projects.png`.
+
+- `--click "<selector>"` (repeatable) reaches a state first, such as an open menu or a filled form.
+- `--wait` takes milliseconds or a selector to wait for.
+- `--scheme dark` emulates dark mode.
+- **Sign-in.** For a page behind a sign-in, run it with `--login` first. Chrome opens for the user to sign in themselves, and closing the tab keeps the session in `out/reference/session.json` for later captures. Never type the user's credentials, and delete the session file when the video is done.
+
+Rebuild the screen against its capture, then compare the two:
+
+```bash
+node scripts/still.mjs --compare projects demo+1s
+```
+
+It renders the frame with the camera held at home and no captions, and writes `out/reference/projects-vs-f00316.png`. The top row has the capture and the rebuild side by side. Below them, the two are laid over each other: where the rebuild matches, the overlay reads as one sharp image; where it drifts, edges and text show double.
+
+Pick a frame where the scene shows the captured state, and where the cursor and callouts aren't over the parts being checked. The data will differ, because the rebuild's is fictional. Everything else should line up: layout, spacing, type, colours, icons and labels.
+
+Captures can show real customer data. They stay in `out/reference/`, which is git-ignored, and are only for checking; none of their data goes into the video. Prefer a staging or demo account. Without a running product, put the user's screenshots in `out/reference/` as `<name>.png`, cropped to the page without the browser's own bars, and compare against those.

@@ -2,7 +2,7 @@
 
 A Claude skill that makes narrated, animated **Done videos** and feature demos as code.
 
-You tell Claude what you finished. It writes a script for you to approve, then rebuilds your product's real screens as React scenes, styled to your design system. A cursor and camera act out the feature on cue with the voiceover, and the result renders to a 1080p MP4 with captions, sound effects and music. Nothing is screen-recorded, so the video is the same every time and changing a line of the script re-times the whole thing.
+You tell Claude what you finished. It writes a script for you to approve, then rebuilds your product's real screens as React scenes, styled to your design system. A cursor and camera act out the feature on cue with the voiceover, and the result renders to a 1080p MP4 with captions, sound effects and music. Nothing is screen-recorded, so the video is the same every time and changing a line of the script re-times the whole thing. Each rebuilt screen is checked against a screenshot of your real page, laid over it, so it matches the product.
 
 ![The example video's demo scene: the cursor opens a project, exports it to CSV, and callouts point out the download and its columns](docs/demo.gif)
 
@@ -31,7 +31,7 @@ Ask Claude for a Done video, for example:
 
 > Make a done video for PBI #123, export tasks to CSV. I'm presenting.
 
-Claude reads the PBI and your product's UI code, drafts the script for you to approve, builds the scenes, checks stills, and renders `out/done-video.mp4`. It asks before anything that costs money or needs your keys.
+Claude reads the PBI and your product's UI code, drafts the script for you to approve, captures your real pages, rebuilds them and checks them against the captures, builds the scenes, checks stills, and renders `out/done-video.mp4`. If a page needs a sign-in, Chrome opens for you to sign in yourself. It asks before anything that costs money or needs your keys.
 
 ## Your design system
 
@@ -86,6 +86,7 @@ In order: `aurora` (dark, brand glows, springy), `midnight` (dark, minimal, deve
 ```
 scripts/scenes.mjs  ──npm run voice──▶  voice clips + src/timeline.json (when each word is spoken)
 src/themes/*.json   ──your design system──▶  colours, type, corners, backdrop and motion
+scripts/capture.mjs ──your real pages──▶  screenshots each rebuilt screen is checked against
 src/scenes/*.tsx    ──cued on those words──▶  every frame is a pure function of its frame number
 npm run mix         ──▶  voice + UI sound effects + ducked music bed, about −16 LUFS
 npm run render      ──▶  headless Chrome screenshots each frame in parallel → ffmpeg → MP4
