@@ -1,0 +1,12 @@
+{
+  "name": "tino-liu",
+  "owner": { "name": "Tino Liu", "url": "https://github.com/tino-liu" },
+  "metadata": { "description": "Tino Liu's Claude Code skills." },
+  "plugins": [
+    {
+      "name": "done-video",
+      "source": "./",
+      "description": "Make narrated, animated Done videos and feature demos as code, rendered to a 1080p MP4."
+    }
+  ]
+}
