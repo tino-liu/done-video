@@ -6,6 +6,10 @@ You tell Claude what you finished. It writes a script for you to approve, then r
 
 ![The example video's demo scene: the cursor opens a project, exports it to CSV, and callouts point out the download and its columns](docs/demo.gif)
 
+The whole example, with sound:
+
+https://github.com/user-attachments/assets/8b1e014f-2143-4118-a0b2-5409066f1a49
+
 ## Install
 
 With [`npx skills`](https://github.com/vercel-labs/skills), for Claude Code, Claude Desktop and other coding agents:
