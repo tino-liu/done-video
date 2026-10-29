@@ -72,7 +72,7 @@ Run `npm run mix`, then `npm run render`. The video is written to `out/<output>`
 | `npm run dev` | The player, with the mixed audio once it exists. |
 | `node scripts/still.mjs <frames>` | PNGs in `out/stills`. Frames are written `120`, `2.5s` or `demo+3s`; `--sheet` also tiles them into `sheet.png`. |
 | `npm run check` | Type-checks the scenes. |
-| `npm run mix` | Voice, sound effects and music in `out/mix.wav`, at −16 LUFS. `--stems` also writes each bus on its own. |
+| `npm run mix` | Voice, sound effects and music in `out/mix.wav`, at about −16 LUFS. `--stems` also writes each bus on its own. |
 | `npm run render` | The MP4. `--from 300 --to 600` renders a slice; `--no-captions` leaves out the captions. |
 | `node scripts/music.mjs` | Optional backing track from ElevenLabs Music, which replaces the synthesized pad. |
 | `node scripts/wait-for-voice.mjs` | Waits for an ElevenLabs Professional Voice Clone to finish training. |

@@ -22,7 +22,7 @@ Check every item on stills from `node scripts/still.mjs --sheet …` before rend
 
 - **The voice is right.** Every take sounds natural, with names pronounced as the user expects.
 - **Sound effects are UI sounds only.** Clicks, pops, chimes and typing, each matching an action on screen.
-- **The level is consistent.** `npm run mix` normalizes to −16 LUFS, and no clip sticks out louder or quieter than the rest.
+- **The level is consistent.** `npm run mix` level-matches every clip and normalizes the whole mix to −16 LUFS, within about 1 LU. No clip should stick out louder or quieter than the rest.
 
 ## Before sharing
 

@@ -45,7 +45,7 @@ Claude reads the PBI and your product's UI code, drafts the script for you to ap
 ```
 scripts/scenes.mjs  ──npm run voice──▶  voice clips + src/timeline.json (when each word is spoken)
 src/scenes/*.tsx    ──cued on those words──▶  every frame is a pure function of its frame number
-npm run mix         ──▶  voice + UI sound effects + ducked music bed, −16 LUFS
+npm run mix         ──▶  voice + UI sound effects + ducked music bed, about −16 LUFS
 npm run render      ──▶  headless Chrome screenshots each frame in parallel → ffmpeg → MP4
 ```
 
