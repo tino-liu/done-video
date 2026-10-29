@@ -4,7 +4,7 @@ A Claude skill that makes narrated, animated **Done videos** and feature demos a
 
 You tell Claude what you finished. It writes a script for you to approve, then rebuilds your product's real screens as React scenes, styled to your design system. A cursor and camera act out the feature on cue with the voiceover, and the result renders to a 1080p MP4 with captions, sound effects and music. Nothing is screen-recorded, so the video is the same every time and changing a line of the script re-times the whole thing.
 
-![Four frames from the example video](docs/preview.jpg)
+![The example video's demo scene: the cursor opens a project, exports it to CSV, and callouts point out the download and its columns](docs/demo.gif)
 
 ## Install
 
@@ -60,9 +60,11 @@ Without a design system, start from a preset and change the accent colour:
 
 > Use the midnight theme with our blue, #0F62FE.
 
+![The example's title card entering in each preset theme, one after another](docs/themes.gif)
+
 ![The same two frames in each preset theme](docs/themes.jpg)
 
-From the top: `aurora` (dark, brand glows, springy), `midnight` (dark, minimal, developer tool), `paper` (light, editorial, serif), `swiss` (flat, square, functional) and `brutal` (thick borders, hard shadows).
+In order: `aurora` (dark, brand glows, springy), `midnight` (dark, minimal, developer tool), `paper` (light, editorial, serif), `swiss` (flat, square, functional) and `brutal` (thick borders, hard shadows).
 
 ## Requirements
 
