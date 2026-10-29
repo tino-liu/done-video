@@ -31,9 +31,34 @@ Claude reads the PBI and your product's UI code, drafts the script for you to ap
 
 ## Your design system
 
-The look around your product's screens comes from a **theme**: the backdrop, the title cards, captions and callouts, the type, the corners and shadows, and how things move. Point Claude at your design system and it maps it to a theme. That can be a tokens file, your Tailwind config or CSS variables, a component library's theme, a style guide or just your website. Claude checks the contrast and shows you stills before it builds anything. Your product's own screens always keep the product's look.
+The look around your product's screens comes from a **theme**: the backdrop, the title cards, captions and callouts, the type, the corners and shadows, and how things move. Tell Claude where your design system is, in the same message or when it asks, and it maps it to a theme. There's no format to convert to:
+
+> Make a done video for PBI #456, the new invoice filters. Use our design system in `../acme-design-system`.
+
+> Done video for issue #88. Our design tokens are in `packages/tokens/tokens.json`.
+
+> Make it look like our website, https://acme.example
+
+> Re-theme this video with the brand guide in `docs/brand-guidelines.pdf`.
+
+Claude can read:
+
+- **Files:** a tokens file (W3C, Tokens Studio or Style Dictionary JSON), a Tailwind config, CSS variables, or a component library's theme.
+- **A design system package** in your repo or `node_modules`.
+- **Docs:** a design system site, a `DESIGN.md`, or a brand guidelines PDF.
+- **Your product's code.** When the video is about a product Claude can read the code of, its stylesheets usually are the design system, and Claude finds them while it studies the screens.
+
+Some sources need a little more from you:
+
+- **Figma.** Export the variables to JSON or share screenshots, unless Claude has a Figma connection.
+- **Licensed brand fonts.** Supply the font files; otherwise Claude uses the closest open font and tells you which.
+- **Private packages and repos.** Your machine needs access already.
+
+Claude checks the contrast and shows you stills before it builds anything. Where the design system leaves a choice open, such as light or dark, it shows both and you pick. Your product's own screens always keep the product's look.
 
 Without a design system, start from a preset and change the accent colour:
+
+> Use the midnight theme with our blue, #0F62FE.
 
 ![The same two frames in each preset theme](docs/themes.jpg)
 
