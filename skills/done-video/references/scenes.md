@@ -127,6 +127,18 @@ Scenes that share a `chapter` share a "Step n of N" pill. Title cards set `capti
 
 Sometimes the presenter speaks inside a screen recording, for example when the feature captures a user describing a bug. Set `recording: true` on that scene. The mix makes it drier and closer, like a laptop mic, and the caption shows in italics with an "In the recording" badge. A REC pill or a screen-sharing bar on screen helps sell it. Raise the captions above any bar along the bottom with `captionBottom`.
 
+## Styling with the theme
+
+Draw everything outside the product's screens from the theme ([theme.md](theme.md)), so a new theme restyles every scene. `src/lib/style.ts` has the helpers:
+
+- **Colours** come from classes: `bg-accent`, `text-accent-foreground`, `text-foreground`, `text-muted`, `bg-surface`, `border-border` and `text-success`. `accentA(percent)` and `glowA(percent)` give tints.
+- **`surface("card" | "box" | "chip")`** styles a card, a caption-sized box or a pill: its background, border, corners, shadow and blur. `radius` and `shadow(size)` give those parts on their own.
+- **Type.** `display` styles headlines and names, and `label` styles small labels. Write labels in sentence case, because the theme sets their case.
+- **`align`** lays out a title card centred or down the left.
+- **Motion.** `appear(f, at, len)` is for text and fades. `pop(f, at, len)` is for pills and badges, and overshoots in a springy theme. `settle(f, at)` is for cards and logos. All three take their pace from the theme. Keep `enter`, `interp` and `spring` for the product's own UI, such as a menu opening.
+
+The product's screens use `--font-app` and the `--color-app-*` tokens instead.
+
 ## Product UI
 
-`src/ui/kit.tsx` holds frame-driven controls: `Button`, `Input`, `Label`, `Select`, `Menu`, `Dialog`, `Toast` and `Spinner`. Their colours come from the `--color-app-*` tokens in `src/styles.css`, so restyle them to the product. `src/ui/app.tsx` is the example product. Replace it with the real product's screens, built from its own components, with the same structure, labels and copy.
+`src/ui/kit.tsx` holds frame-driven controls: `Button`, `Input`, `Label`, `Select`, `Menu`, `Dialog`, `Toast` and `Spinner`. Their colours come from the `--color-app-*` tokens in `src/styles.css`, and the browser window sets its contents in `--font-app`, so restyle both to the product. `src/ui/app.tsx` is the example product. Replace it with the real product's screens, built from its own components, with the same structure, labels and copy.

@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client"
 import { STAGE_H, STAGE_W } from "./components/Camera"
 import { allEvents } from "./scenes"
 import { sceneIndexAt, Stage } from "./Stage"
-import { applyBrand } from "./lib/brand"
+import { applyTheme, checkTheme, themeName, themeNames } from "./lib/theme"
 import { FPS, timeline } from "./lib/timeline"
 
 declare global {
@@ -39,7 +39,8 @@ const imagesLoaded = () =>
       )
   )
 
-applyBrand()
+applyTheme()
+document.fonts.ready.then(checkTheme)
 
 /** Headless mode: scripts/render.mjs calls __setFrame(n) and screenshots the stage. */
 function RenderApp() {
@@ -52,7 +53,11 @@ function RenderApp() {
       flushSync(() => setState({ frame: n, pass: 0 }))
       flushSync(() => setState({ frame: n, pass: 1 }))
       await new Promise((r) => requestAnimationFrame(() => r(null)))
-      await imagesLoaded()
+      // A font or image first used on this frame loads during those passes and reflows the page,
+      // so measure once more after everything has loaded.
+      await Promise.all([imagesLoaded(), document.fonts.ready])
+      flushSync(() => setState({ frame: n, pass: 2 }))
+      await new Promise((r) => requestAnimationFrame(() => r(null)))
     }
     document.fonts.ready.then(async () => {
       await window.__setFrame?.(Number(params.get("frame") ?? 0))
@@ -60,6 +65,13 @@ function RenderApp() {
     })
   }, [])
   return <Stage frame={state.frame} pass={state.pass} captions={SHOW_CAPTIONS} />
+}
+
+/** Reloads the player in another theme from src/themes/. */
+function setThemeParam(name: string) {
+  const next = new URLSearchParams(location.search)
+  next.set("theme", name)
+  location.search = next.toString()
 }
 
 const fmt = (frame: number) => {
@@ -168,6 +180,11 @@ function Player() {
           </button>
         ))}
         <span className="text-[#888]">voice: {timeline.voice} · {hasAudio ? "mixed audio" : "silent (run npm run mix)"}</span>
+        <select value={themeName} onChange={(e) => setThemeParam(e.target.value)} className="rounded-md border border-[#444] bg-[#222] px-2 py-1 text-[#ddd]">
+          {[...new Set([themeName, ...themeNames])].map((name) => (
+            <option key={name}>{name}</option>
+          ))}
+        </select>
       </div>
       {hasAudio && <audio ref={audio} src={MIX_URL} preload="auto" />}
     </div>

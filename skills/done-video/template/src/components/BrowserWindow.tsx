@@ -1,9 +1,12 @@
 import { Lock } from "lucide-react"
 import type { ReactNode } from "react"
 
+import { shadow, theme as look } from "../lib/style"
 import { WINDOW_BOX } from "./Camera"
 
 export const TITLE_BAR = 46
+/** A real browser window's corners. Squarer themes get squarer windows, never rounder ones. */
+const MAX_RADIUS = 14
 
 type Props = {
   url: string
@@ -24,8 +27,10 @@ export function BrowserWindow({ url, theme = "dark", children, overlay }: Props)
         top: WINDOW_BOX.y,
         width: WINDOW_BOX.w,
         height: WINDOW_BOX.h,
-        borderRadius: 14,
-        boxShadow: "0 40px 90px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.09)",
+        borderRadius: Math.min(look.shape.radius, MAX_RADIUS),
+        // The product keeps its own font; the theme's fonts are for what's around it.
+        fontFamily: "var(--font-app)",
+        boxShadow: [`0 0 0 ${look.shape.border}px var(--color-border)`, shadow("window", look.shape.border)].filter((v) => v !== "none").join(", "),
       }}
     >
       <div className="relative flex items-center px-5" style={{ height: TITLE_BAR, background: dark ? "#1d1d20" : "#e8e8ea" }}>

@@ -1,18 +1,24 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/500.css";
+@import "./fonts.css";
 
 @theme {
-  --font-sans: "Inter Variable", Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-
-  /* Overwritten at startup from video.config.json (src/lib/brand.ts). */
-  --color-accent: #cc4141;
-  --color-glow: #7c3a8c;
+  /* The video's look. Overwritten at startup from the theme in src/themes/ (src/lib/theme.ts). */
+  --font-sans: "Inter Variable", sans-serif;
+  --font-display: "Inter Variable", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --color-background: #1b1b1b;
+  --color-background-2: #333333;
+  --color-surface: rgba(20, 20, 20, 0.75);
+  --color-foreground: #ffffff;
   --color-muted: #aaaaaa;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-accent: #cc4141;
+  --color-accent-foreground: #ffffff;
+  --color-glow: #7c3a8c;
+  --color-success: #4ade80;
 
-  /* The product's own palette goes here, copied from its real stylesheet. The example app's: */
+  /* The product's own font and palette go here, copied from its real stylesheet. The example app's: */
+  --font-app: "Inter Variable", sans-serif;
   --color-app-bg: #ffffff;
   --color-app-side: #f6f7f9;
   --color-app-fg: #1f2328;

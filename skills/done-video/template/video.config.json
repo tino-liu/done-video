@@ -1,11 +1,10 @@
 {
   "output": "done-video.mp4",
   "brand": {
-    "accent": "#CC4141",
-    "glow": "#7C3A8C",
-    "logo": "/assets/logo.svg",
-    "name": "Acme Tasks"
+    "name": "Acme Tasks",
+    "logo": "/assets/logo.svg"
   },
+  "theme": "aurora",
   "voice": {
     "model": "eleven_multilingual_v2",
     "settings": { "stability": 0.35, "similarity_boost": 0.85, "style": 0.35, "use_speaker_boost": true, "speed": 1.04 },

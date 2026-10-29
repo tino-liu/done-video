@@ -1,25 +1,43 @@
 import { Mic } from "lucide-react"
+import type { CSSProperties } from "react"
 
 import { Ease, interp } from "../lib/anim"
-import { accentA, brand, glowA } from "../lib/brand"
+import { brand } from "../lib/brand"
+import { accentA, glowA, label, radius, surface, theme } from "../lib/style"
 import { FPS, timeline } from "../lib/timeline"
 import type { SceneTiming, Word } from "../lib/timeline"
 
-/** Dark backdrop with two slow glows in the brand colours. */
+const INK = (percent: number) => `color-mix(in srgb, var(--color-foreground) ${percent}%, transparent)`
+const NOISE = `url("data:image/svg+xml,${encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>")}")`
+const FADE_EDGES = "radial-gradient(ellipse at center, black 30%, transparent 80%)"
+
+const TEXTURES: Record<Exclude<typeof theme.backdrop.texture, "none">, CSSProperties> = {
+  dots: { backgroundImage: `radial-gradient(${INK(7)} 1px, transparent 1px)`, backgroundSize: "34px 34px", maskImage: FADE_EDGES },
+  grid: { backgroundImage: `linear-gradient(${INK(6)} 1px, transparent 1px), linear-gradient(90deg, ${INK(6)} 1px, transparent 1px)`, backgroundSize: "64px 64px", maskImage: FADE_EDGES },
+  noise: { backgroundImage: NOISE, opacity: theme.mode === "dark" ? 0.06 : 0.1, mixBlendMode: theme.mode === "dark" ? "screen" : "multiply" },
+}
+
+/** The theme's backdrop: a flat colour, a gradient, an image, or the gradient with two slow glows in the brand colours. */
 export function Backdrop({ g }: { g: number }) {
+  const { style, texture, image, dim } = theme.backdrop
   const drift = Math.sin(g / 240) * 6
   return (
-    <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #333333 0%, #222222 55%, #1b1b1b 100%)" }}>
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(900px 620px at ${12 + drift}% ${92 - drift}%, ${accentA(38)}, transparent 70%), radial-gradient(800px 560px at ${88 - drift}% ${8 + drift}%, ${glowA(22)}, transparent 70%)`,
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)", backgroundSize: "34px 34px", maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)" }}
-      />
+    <div className="absolute inset-0" style={{ background: style === "solid" ? "var(--color-background)" : "linear-gradient(180deg, var(--color-background-2) 0%, var(--color-background) 100%)" }}>
+      {style === "image" && image && (
+        <>
+          <img src={image} className="absolute inset-0 size-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "var(--color-background)", opacity: dim }} />
+        </>
+      )}
+      {style === "aurora" && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(900px 620px at ${12 + drift}% ${92 - drift}%, ${accentA(38)}, transparent 70%), radial-gradient(800px 560px at ${88 - drift}% ${8 + drift}%, ${glowA(22)}, transparent 70%)`,
+          }}
+        />
+      )}
+      {texture !== "none" && <div className="absolute inset-0" style={TEXTURES[texture]} />}
     </div>
   )
 }
@@ -29,8 +47,6 @@ const CHAPTER_NUMBERS = new Map<string, number>()
 for (const s of timeline.scenes) if (s.chapter && !CHAPTER_NUMBERS.has(s.chapter)) CHAPTER_NUMBERS.set(s.chapter, CHAPTER_NUMBERS.size + 1)
 
 const chapterOf = (s?: SceneTiming) => (s?.chapter ? { n: CHAPTER_NUMBERS.get(s.chapter) ?? 0, title: s.chapter } : undefined)
-
-const PILL = { background: "rgba(20,20,20,0.72)", border: "1px solid rgba(255,255,255,0.10)", backdropFilter: "blur(8px)" }
 
 /** "Step 1 of 3 · Export to CSV" pill, top left, plus the brand lockup top right. */
 export function ChapterHeader({ scene, local, prev }: { scene: SceneTiming; local: number; prev?: SceneTiming }) {
@@ -44,20 +60,20 @@ export function ChapterHeader({ scene, local, prev }: { scene: SceneTiming; loca
   return (
     <>
       <div className="absolute flex items-center gap-4" style={{ left: 120, top: 30, opacity: show }}>
-        <div className="flex items-center gap-3 rounded-full py-2 pr-6 pl-2" style={PILL}>
-          <span className="bg-accent flex items-center justify-center rounded-full font-bold text-white" style={{ width: 34, height: 34, fontSize: 17 }}>
+        <div className="flex items-center gap-3 py-2 pr-6 pl-2" style={surface("chip")}>
+          <span className="bg-accent text-accent-foreground flex items-center justify-center font-bold" style={{ width: 34, height: 34, fontSize: 17, borderRadius: radius.chip }}>
             {shown.n}
           </span>
-          <span className="text-muted" style={{ fontSize: 15, letterSpacing: "0.12em", fontWeight: 600 }}>
-            STEP {shown.n} OF {CHAPTER_NUMBERS.size}
+          <span className="text-muted" style={{ ...label, fontSize: 15 }}>
+            Step {shown.n} of {CHAPTER_NUMBERS.size}
           </span>
-          <span style={{ width: 1, height: 18, background: "rgba(255,255,255,0.18)" }} />
-          <span style={{ fontSize: 20, fontWeight: 600, color: "#fff", opacity: swap, transform: `translateY(${(1 - swap) * 8}px)`, display: "inline-block" }}>{shown.title}</span>
+          <span style={{ width: theme.shape.border, height: 18, background: "var(--color-border)" }} />
+          <span className="text-foreground" style={{ fontSize: 20, fontWeight: 600, opacity: swap, transform: `translateY(${(1 - swap) * 8}px)`, display: "inline-block" }}>{shown.title}</span>
         </div>
       </div>
-      <div className="absolute flex items-center gap-3 rounded-full px-5 py-2.5" style={{ right: 120, top: 30, opacity: show, ...PILL }}>
+      <div className="absolute flex items-center gap-3 px-5 py-2.5" style={{ right: 120, top: 30, opacity: show, ...surface("chip") }}>
         <img src={brand.logo} style={{ height: 24 }} />
-        <span className="text-white" style={{ fontSize: 20, fontWeight: 600 }}>
+        <span className="text-foreground" style={{ fontSize: 20, fontWeight: 600 }}>
           {brand.name}
         </span>
       </div>
@@ -95,12 +111,9 @@ export function Captions({ scene, local }: { scene: SceneTiming; local: number }
   const fadeIn = interp(t, [chunk[0].s - 0.05, chunk[0].s + 0.1])
   return (
     <div className="absolute flex justify-center" style={{ left: 0, right: 0, bottom: scene.captionBottom ?? CAPTION_BOTTOM }}>
-      <div
-        className="flex items-center gap-3 rounded-xl"
-        style={{ background: "rgba(12,12,12,0.82)", padding: "12px 26px", fontSize: 30, fontWeight: 500, color: "#fff", opacity: fadeIn, backdropFilter: "blur(6px)", maxWidth: 1400, border: "1px solid rgba(255,255,255,0.08)" }}
-      >
+      <div className="text-foreground flex items-center gap-3" style={{ ...surface("box"), padding: "12px 26px", fontSize: 30, fontWeight: 500, opacity: fadeIn, maxWidth: 1400 }}>
         {scene.recording && (
-          <span className="bg-accent flex items-center gap-2 rounded-full" style={{ padding: "4px 12px", fontSize: 18, fontWeight: 600 }}>
+          <span className="bg-accent text-accent-foreground flex items-center gap-2" style={{ padding: "4px 12px", fontSize: 18, fontWeight: 600, borderRadius: radius.chip }}>
             <Mic size={16} /> In the recording
           </span>
         )}

@@ -2,6 +2,7 @@
 //   node scripts/render.mjs            → out/<output in video.config.json>
 //   node scripts/render.mjs --from 600 --to 900   (a slice, for checking)
 //   node scripts/render.mjs --no-captions
+//   node scripts/render.mjs --theme paper   (another theme from src/themes/)
 import { execFileSync } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs"
 import { cpus } from "node:os"
@@ -24,8 +25,10 @@ const arg = (name) => {
 const from = Number(arg("--from") ?? 0)
 const to = Number(arg("--to") ?? timeline.total)
 const captions = !process.argv.includes("--no-captions")
+const theme = arg("--theme")
 const workers = Math.max(2, Math.min(8, cpus().length - 2))
-const out = join(ROOT, "out", arg("--out") ?? (from === 0 && to === timeline.total ? output : `slice-${from}-${to}.mp4`))
+const named = from === 0 && to === timeline.total ? output : `slice-${from}-${to}.mp4`
+const out = join(ROOT, "out", arg("--out") ?? (theme ? named.replace(/\.mp4$/, `-${theme}.mp4`) : named))
 
 rmSync(FRAMES, { recursive: true, force: true })
 mkdirSync(FRAMES, { recursive: true })
@@ -46,7 +49,7 @@ await Promise.all(
     if (a >= b) return
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 })
     page.on("pageerror", (err) => console.log(`[worker ${w}]`, err.message))
-    await page.goto(`http://localhost:${PORT}/?render${captions ? "" : "&captions=0"}`)
+    await page.goto(`http://localhost:${PORT}/?render${captions ? "" : "&captions=0"}${theme ? `&theme=${encodeURIComponent(theme)}` : ""}`)
     await page.waitForFunction(() => window.__ready === true, null, { timeout: 30000 })
     for (let f = a; f < b; f++) {
       await page.evaluate((n) => window.__setFrame(n), f)

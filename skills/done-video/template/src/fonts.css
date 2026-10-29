@@ -1,0 +1,9 @@
+/* Every font a theme names needs its @font-face here, so every machine renders the same frames.
+   Google Fonts: npm install @fontsource-variable/<name> (or @fontsource/<name>) and import it.
+   A licensed brand font: put the files in public/fonts/ and declare them, for example
+     @font-face { font-family: "Acme Sans"; src: url("/fonts/AcmeSans.woff2") format("woff2"); font-weight: 100 900; } */
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";

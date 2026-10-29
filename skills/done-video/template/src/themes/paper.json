@@ -1,0 +1,23 @@
+{
+  "mode": "light",
+  "colors": {
+    "background": "#f4efe6",
+    "background2": "#ebe3d5",
+    "surface": "#fffcf7",
+    "foreground": "#1f1b16",
+    "muted": "#6b6257",
+    "border": "rgba(31, 27, 22, 0.12)",
+    "accent": "#b4532a",
+    "accentForeground": "#ffffff",
+    "glow": "#d9a35f",
+    "success": "#3d7a4f"
+  },
+  "fonts": { "display": "\"Fraunces Variable\", Georgia, serif", "body": "\"Inter Variable\", sans-serif", "mono": "\"IBM Plex Mono\", monospace" },
+  "text": { "displayWeight": 500, "displayTracking": "-0.015em", "labelCase": "uppercase", "labelTracking": "0.18em", "labelFont": "body" },
+  "shape": { "radius": 6, "chip": 999, "border": 1 },
+  "material": "solid",
+  "shadow": "soft",
+  "backdrop": { "style": "gradient", "texture": "noise" },
+  "motion": "calm",
+  "align": "start"
+}

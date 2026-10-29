@@ -1,5 +1,5 @@
 import { Ease, interp, keys } from "../lib/anim"
-import { accentA } from "../lib/brand"
+import { accentA } from "../lib/style"
 import { measure, useRoot } from "../lib/measure"
 import { useShot } from "./Camera"
 
