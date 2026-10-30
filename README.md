@@ -25,6 +25,21 @@ claude plugin marketplace add tino-liu/done-video
 claude plugin install done-video@tino-liu
 ```
 
+### Update
+
+Neither install updates itself by default. For the plugin, turn on auto-update once: run `/plugin` in Claude Code, open the **Marketplaces** tab, pick `tino-liu` and choose **Enable auto-update**. Claude Code then updates the skill in the background and asks you to run `/reload-plugins`. Or update it yourself:
+
+```bash
+claude plugin marketplace update tino-liu
+claude plugin update done-video@tino-liu
+```
+
+With `npx skills`:
+
+```bash
+npx skills update
+```
+
 ## Use
 
 Ask Claude for a Done video, for example:
