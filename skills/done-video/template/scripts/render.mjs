@@ -4,7 +4,7 @@
 //   node scripts/render.mjs --no-captions
 //   node scripts/render.mjs --theme paper   (another theme from src/themes/)
 import { execFileSync } from "node:child_process"
-import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { cpus } from "node:os"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -37,6 +37,11 @@ await build({ root: ROOT, logLevel: "warn" })
 const server = await preview({ root: ROOT, preview: { port: PORT, strictPort: true }, logLevel: "warn" })
 const browser = await chromium.launch({ channel: "chrome", headless: true })
 
+// What the pages reported while rendering, such as a cue that wasn't found. It's saved beside the
+// video for scripts/review.mjs.
+const errors = new Set()
+const warnings = new Set()
+
 const started = Date.now()
 let done = 0
 const count = to - from
@@ -48,7 +53,11 @@ await Promise.all(
     const b = Math.min(to, a + chunk)
     if (a >= b) return
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 })
-    page.on("pageerror", (err) => console.log(`[worker ${w}]`, err.message))
+    page.on("pageerror", (err) => {
+      console.log(`[worker ${w}]`, err.message)
+      errors.add(err.message)
+    })
+    page.on("console", (msg) => ["error", "warning"].includes(msg.type()) && (msg.type() === "error" ? errors : warnings).add(msg.text()))
     await page.goto(`http://localhost:${PORT}/?render${captions ? "" : "&captions=0"}${theme ? `&theme=${encodeURIComponent(theme)}` : ""}`)
     await page.waitForFunction(() => window.__ready === true, null, { timeout: 30000 })
     for (let f = a; f < b; f++) {
@@ -83,4 +92,5 @@ execFileSync(
   ],
   { stdio: "inherit" }
 )
+writeFileSync(out.replace(/\.mp4$/, ".render.json"), JSON.stringify({ from, to, captions, theme: theme ?? null, errors: [...errors], warnings: [...warnings] }, null, 1))
 console.log(`→ ${out}`)

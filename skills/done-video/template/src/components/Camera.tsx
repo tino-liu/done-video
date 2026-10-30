@@ -73,22 +73,26 @@ function resolve(root: HTMLElement | null, key: CamKey, prev: Shot): Shot {
   return clampShot({ cx, cy, s: Math.max(1, s) })
 }
 
-/** The shot at frame f. */
+type Move = { from: Shot; to: Shot; at: number; end: number }
+
+/** Where a move has got to at frame f. */
+function along({ from, to, at, end }: Move, f: number): Shot {
+  if (f >= end) return to
+  const t = interp(f, [at, end], [0, 1], Ease.inOut)
+  // Zoom in log space so in and out feel the same speed.
+  const s = Math.exp(Math.log(from.s) + (Math.log(to.s) - Math.log(from.s)) * t)
+  return { cx: from.cx + (to.cx - from.cx) * t, cy: from.cy + (to.cy - from.cy) * t, s }
+}
+
+/** The shot at frame f. A move that starts before the last one ends takes over from wherever the camera is. */
 function shotAt(root: HTMLElement | null, f: number, camKeys: CamKey[]): Shot {
-  let from = HOME
+  let move: Move | null = null
   for (const key of camKeys) {
-    const to = resolve(root, key, from)
-    const end = key.at + (key.dur ?? DEFAULT_MOVE)
-    if (f < key.at) return from
-    if (f < end) {
-      const t = interp(f, [key.at, end], [0, 1], Ease.inOut)
-      // Zoom in log space so in and out feel the same speed.
-      const s = Math.exp(Math.log(from.s) + (Math.log(to.s) - Math.log(from.s)) * t)
-      return { cx: from.cx + (to.cx - from.cx) * t, cy: from.cy + (to.cy - from.cy) * t, s }
-    }
-    from = to
+    if (f < key.at) break
+    const from: Shot = move ? along(move, key.at) : HOME
+    move = { from, to: resolve(root, key, from), at: key.at, end: key.at + (key.dur ?? DEFAULT_MOVE) }
   }
-  return from
+  return move ? along(move, f) : HOME
 }
 
 const ShotContext = createContext<Shot>({ cx: STAGE_W / 2, cy: STAGE_H / 2, s: 1 })

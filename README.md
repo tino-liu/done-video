@@ -31,7 +31,7 @@ Ask Claude for a Done video, for example:
 
 > Make a done video for PBI #123, export tasks to CSV. I'm presenting.
 
-Claude reads the PBI and your product's UI code, drafts the script for you to approve, captures your real pages, rebuilds them and checks them against the captures, builds the scenes, checks stills, and renders `out/done-video.mp4`. If a page needs a sign-in, Chrome opens for you to sign in yourself. It asks before anything that costs money or needs your keys.
+Claude reads the PBI and your product's UI code, drafts the script for you to approve, captures your real pages, rebuilds them and checks them against the captures, builds the scenes, checks stills, and renders `out/done-video.mp4`. Then it reviews the whole video, every frame and the soundtrack, and fixes what it finds before handing it over: stray sounds and static after a line, glitched frames, camera jumps, a cut-off ending. If a page needs a sign-in, Chrome opens for you to sign in yourself. It asks before anything that costs money or needs your keys.
 
 ## Your design system
 
@@ -88,8 +88,9 @@ scripts/scenes.mjs  ──npm run voice──▶  voice clips + src/timeline.jso
 src/themes/*.json   ──your design system──▶  colours, type, corners, backdrop and motion
 scripts/capture.mjs ──your real pages──▶  screenshots each rebuilt screen is checked against
 src/scenes/*.tsx    ──cued on those words──▶  every frame is a pure function of its frame number
-npm run mix         ──▶  voice + UI sound effects + ducked music bed, about −16 LUFS
+npm run mix         ──▶  cleaned-up voice + UI sound effects + ducked music bed, −16 LUFS
 npm run render      ──▶  headless Chrome screenshots each frame in parallel → ffmpeg → MP4
+npm run review      ──▶  every frame and the soundtrack checked, plus a contact sheet of each scene
 ```
 
 The skill's instructions are in [`skills/done-video/SKILL.md`](skills/done-video/SKILL.md), and the starting project is in [`skills/done-video/template`](skills/done-video/template).

@@ -1,6 +1,6 @@
 {
   "name": "done-video",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Make narrated, animated Done videos and feature demos as code: React scenes of your product's real screens in your design system's look, a cursor and camera cued to the voiceover, rendered to a 1080p MP4.",
   "author": { "name": "Tino Liu", "url": "https://github.com/tino-liu" },
   "homepage": "https://github.com/tino-liu/done-video",

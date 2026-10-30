@@ -27,7 +27,9 @@ Listen to every new clip in `public/audio/voice/` before rendering, and have the
 
 Speech-to-text helps catch misread words, but it can't judge pronunciation. It hears a mispronounced brand name as correct and a good take as wrong. To choose between takes of a name, have someone listen, or compare the word's sound against takes the user has already approved.
 
-ElevenLabs sometimes adds a stray breath or "sk" after a clip's last word. `npm run mix` cuts these automatically. If one gets through, `npm run mix -- --stems` writes the voice, the sound effects and the music to separate files for checking.
+ElevenLabs sometimes adds a stray sound after a line's last word or in a pause: a breath, an "sk", a click or static. A cloned voice also carries the hiss of the room its samples were recorded in. `npm run mix` cuts each line a moment after its last word and fades it out, and silences a stray sound in a pause. It leaves a sound alone when it could be a word, and `npm run review` then lists it: re-roll that line. The mix writes the voice, the sound effects and the music to `out/stem-*.wav` too, for checking one on its own.
+
+Hiss under the words stays. A clone trained on recordings made somewhere quieter sounds cleaner.
 
 ## Music
 

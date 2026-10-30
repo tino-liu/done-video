@@ -88,7 +88,7 @@ Every element the cursor, camera, a callout or a highlight points at carries `da
 - `x`, `y` and `scale` set the shot directly. `{ x: 960, y: 540, scale: 1 }` is home.
 - `dx` and `dy` nudge the centre after the target is resolved.
 
-The zoom is interpolated in log space, and a zoomed shot is held inside the browser window. A control reads well at a scale of 1.3–1.6, and a detail at up to about 2.1. Start the zoom about 16 frames before the click it frames, and leave a couple of seconds between zoom changes.
+The zoom is interpolated in log space, and a zoomed shot is held inside the browser window. A move that starts before the last one finishes takes over from wherever the camera is. A control reads well at a scale of 1.3–1.6, and a detail at up to about 2.1. Start the zoom about 16 frames before the click it frames, and leave a couple of seconds between zoom changes.
 
 ## Pointing things out
 

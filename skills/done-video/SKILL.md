@@ -70,11 +70,26 @@ Capture each real screen with `scripts/capture.mjs` before rebuilding it, and co
 
 ### 8. Check frames
 
-Render stills at every beat, such as each click, menu, zoom and transition, using `node scripts/still.mjs --sheet <frames>`. Read `out/stills/sheet.png`, fix what is wrong, and repeat. Then go through every item in [references/review.md](references/review.md). The step is done when every item passes on the stills.
+Render stills at every beat, such as each click, menu, zoom and transition, using `node scripts/still.mjs --sheet <frames>`. Read `out/stills/sheet.png`, fix what is wrong, and repeat. Then go through the picture items in [references/review.md](references/review.md). The step is done when every picture item passes on the stills.
 
-### 9. Mix, render, deliver
+### 9. Mix and render
 
-Run `npm run mix`, then `npm run render`. The video is written to `out/<output>`. Send it to the user and take their notes. Each round of changes re-voices only the lines that changed, then re-mixes and re-renders.
+Run `npm run mix`, then `npm run render`. The video is written to `out/<output>`. The mix cleans up the voice as it goes: it cuts each line a moment after its last word and fades it out, which removes trailing static and hiss, and silences stray sounds in pauses.
+
+### 10. Review the whole video
+
+Go through the finished video from its first frame to its last, and fix everything wrong with it, before the user sees it. Run `npm run review`. It checks every frame and the whole soundtrack, and prints:
+
+- **Problems**, such as a stray sound after a line, a one-frame glitch, a cut-off ending or a page error during the render. Fix every one.
+- **Things to look at**, such as the picture changing all at once (right for a new page, wrong for a camera jump) or a sound after a line that could be a word. Decide each from the sheets, and fix the ones that are wrong.
+
+It also writes contact sheets to `out/review/`, one or more per scene: frames through the scene, each with its time and the words being spoken, above a spectrogram of the scene's sound. Read every sheet and check it against every item in [references/review.md](references/review.md). A sound the mix couldn't safely remove is fixed by re-rolling that line.
+
+After fixing, run whatever the fixes need again (voice, then mix, render and review), and repeat. The step is done when the review prints no problems, every thing to look at is fixed or plainly right on its sheet, and you have read every sheet from the latest render.
+
+### 11. Deliver
+
+Send the video to the user, with a line on what the review caught and fixed, and take their notes. Each round of changes re-voices only the lines that changed, then re-mixes, re-renders and reviews again.
 
 ## Commands
 
@@ -85,7 +100,8 @@ Run `npm run mix`, then `npm run render`. The video is written to `out/<output>`
 | `node scripts/still.mjs <frames>` | PNGs in `out/stills`. Frames are written `120`, `2.5s` or `demo+3s`; `--sheet` also tiles them into `sheet.png`. `--theme a,b` renders them in each theme, a row per theme. `--compare <name>` checks the window's contents against a capture. |
 | `node scripts/capture.mjs <url> --name <name>` | Screenshots a real page at the size its rebuild fills, into `out/reference/`. `--click`, `--wait`, `--scheme dark`; `--login` lets the user sign in first. |
 | `npm run check` | Type-checks the scenes. |
-| `npm run mix` | Voice, sound effects and music in `out/mix.wav`, at about −16 LUFS. `--stems` also writes each bus on its own. |
+| `npm run mix` | Voice, sound effects and music in `out/mix.wav`, at −16 LUFS, with each line's tail and stray sounds cleaned up. Also writes each bus on its own (`out/stem-*.wav`). |
 | `npm run render` | The MP4. `--from 300 --to 600` renders a slice; `--no-captions` leaves out the captions; `--theme <name>` renders another theme. |
+| `npm run review` | Checks the whole video, frame by frame and through its soundtrack, and draws contact sheets of each scene into `out/review/`. `-- out/<file>.mp4` reviews another render. Exits 1 on a problem. |
 | `node scripts/music.mjs` | Optional backing track from ElevenLabs Music, which replaces the synthesized pad. |
 | `node scripts/wait-for-voice.mjs` | Waits for an ElevenLabs Professional Voice Clone to finish training. |
